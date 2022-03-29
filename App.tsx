@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import MenuScreen from './src/screens/MenuScreen/MenuScreen';
+import PlayScreen from './src/screens/PlayScreen/PlayScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,6 +13,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Menu" component={MenuScreen} />
+        <Stack.Screen name="Play" component={PlayScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
