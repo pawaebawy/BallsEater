@@ -16,8 +16,8 @@ function Routes() {
                 }}
             >
                 <Stack.Screen name="Home" component={ HomeScreen } />
-                <Stack.Screen name="Play" component={PlayScreen} />
-                <Stack.Screen name="Levels" component={LevelsScreen} />
+                <Stack.Screen name="Play" component={ PlayScreen } />
+                <Stack.Screen name="Levels" component={ LevelsScreen } />
             </Stack.Navigator>
         </NavigationContainer>
     );

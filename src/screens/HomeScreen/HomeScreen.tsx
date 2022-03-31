@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Logo, PlayButton } from '../../components';
 import s from './styles';
 
@@ -8,7 +8,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={s.container}>
       <View style={s.header}>
         <Logo />
-        <View>Звук</View>
+        <Text>Звук</Text>
       </View>
       <View style={s.homeBlock}>
         <PlayButton navigation={navigation} />
