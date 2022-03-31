@@ -6,22 +6,24 @@ import Cell from '@components/Cell/Cell';
 import { fieldData } from './data';
 
 const Field = () => {
-  const cellsQty = fieldData.length;
+  const renderCells = () => {
+    return fieldData.map((column) => {
+      return (
+        <View style={styles.column}>
+          {
+            column.map((cell) => {
+              return <Cell isExist={cell.isExists} />;
+            })
+          }
+        </View>
+      )
+    })
+  };
 
   return (
     <View style={styles.root}>
       {
-        fieldData.map((column) => {
-          return (
-            <View style={styles.column}>
-              {
-                column.map((cell) => {
-                  return <Cell isExist={cell.isExists} />;
-                })
-              }
-            </View>
-          )
-        })
+        renderCells()
       }
     </View>
   );
