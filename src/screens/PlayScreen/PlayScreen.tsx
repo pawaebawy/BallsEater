@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { HomeButton } from '../../components';
+
+import HomeButton from '@components/HomeButton/HomeButton';
+import Field from '@components/Field/Field';
+
 import s from './styles'
 
 const PlayScreen = ({ navigation }) => {
@@ -11,6 +14,7 @@ const PlayScreen = ({ navigation }) => {
       </View>
       <View style={s.content}>
         <Text>Контент игры</Text>
+        <Field />
       </View>
     </View>
   );
