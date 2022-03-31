@@ -1,23 +1,23 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Button } from 'react-native';
+import { Logo, PlayButton } from '../../components';
 import s from './styles';
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={s.container}>
+    <View style={s.container}>
+      <View style={s.header}>
+        <Logo />
+        <View>Звук</View>
+      </View>
       <View style={s.homeBlock}>
-        <Text style={s.homeBlockTitle}>Home Screen</Text>
-        <Button
-          title="Play"
-          onPress={() => navigation.navigate('Play')}
-        />
+        <PlayButton navigation={navigation} />
         <Button
           title="Levels"
           onPress={() => navigation.navigate('Levels')}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
