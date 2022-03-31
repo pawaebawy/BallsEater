@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
+import { HomeButton } from '../../components';
 import s from './styles'
 
-const MenuScreen = ({ navigation }) => {
+const PlayScreen = ({ navigation }) => {
   return (
     <View style={s.container}>
-      <Text>Play Screen</Text>
-      <Button
-        title="Back to Menu"
-        onPress={() => navigation.navigate('Home')}
-      />
+      <View style={s.header}>
+        <HomeButton navigation={navigation} />
+      </View>
+      <View style={s.content}>
+        <Text>Контент игры</Text>
+      </View>
     </View>
   );
 };
 
-export default MenuScreen;
+export default PlayScreen;
