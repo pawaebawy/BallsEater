@@ -19,5 +19,18 @@ export default StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    button: {
+        backgroundColor: '#a11',
+        paddingVertical: 15,
+        paddingHorizontal: 30,
+        borderRadius: 10,
+        marginBottom: 15
+    },
+    buttonText: {
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#fff',
     }
 });

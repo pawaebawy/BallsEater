@@ -1,10 +1,12 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import s from './styles';
 
 const PlayButton = ({ navigation }) => {
   return (
-    <Text onPress={() => navigation.navigate('Play')} style={s.playButton}>Играть</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('Play')} style={s.button}>
+      <Text style={s.buttonText}>Играть</Text>
+    </TouchableOpacity>
   );
 };
 

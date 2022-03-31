@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Button, TouchableOpacity, Text } from 'react-native';
 import { Logo, PlayButton } from '../../components';
 import s from './styles';
 
@@ -12,10 +12,9 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View style={s.homeBlock}>
         <PlayButton navigation={navigation} />
-        <Button
-          title="Levels"
-          onPress={() => navigation.navigate('Levels')}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate('Levels')} style={s.button}>
+          <Text style={s.buttonText}>Уровни</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -1,10 +1,17 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    playButton: {
+    button: {
+        backgroundColor: '#a11',
+        paddingVertical: 15,
+        paddingHorizontal: 30,
+        borderRadius: 10,
+        marginBottom: 15
+    },
+    buttonText: {
         fontFamily: 'Montserrat-Bold',
-        fontSize: 42,
+        fontSize: 24,
         fontWeight: 'bold',
-        color: '#fff'
+        color: '#fff',
     }
 });
