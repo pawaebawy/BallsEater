@@ -1,31 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as Font from 'expo-font';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useEffect, useState } from 'react';
+import { LoadingScreen } from './src/screens';
+import Routes from './src/navigation';
 
-import MenuScreen from './src/screens/MenuScreen/MenuScreen';
-import PlayScreen from './src/screens/PlayScreen/PlayScreen';
+const fetchLoading = async () => {
+  const fetchFonts = () => { 
+    return Font.loadAsync({
+      'Montserrat-Bold': require('./src/assets/fonts/MontserratAlternates-Bold.ttf'),
+      'Montserrat-Regular': require('./src/assets/fonts/MontserratAlternates-Regular.ttf')
+    });
+  }
 
-const Stack = createNativeStackNavigator();
+  await fetchFonts();
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  return;
+};
 
 const App = () => {
+  const [appLoaded, setAppLoaded] = useState(false);
+
+  const prepare = async () => {
+    await fetchLoading();
+    setAppLoaded(true);
+  };
+
+  useEffect(() => {
+    prepare();
+  }, []);
+
+  if (!appLoaded) {
+    return (
+      <SafeAreaProvider>
+        <LoadingScreen />
+      </SafeAreaProvider>
+    );
+  }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Menu" component={MenuScreen} />
-        <Stack.Screen name="Play" component={PlayScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <Routes />
+    </SafeAreaProvider>
   );
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
