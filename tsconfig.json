@@ -6,7 +6,10 @@
     "paths": {
       "@components/*": [
         "components/*"
-      ]
+      ],
+      "@data/*": [
+        "data/*"
+      ],
     }
   },
   "include": [

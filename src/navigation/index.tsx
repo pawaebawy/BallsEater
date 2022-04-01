@@ -15,7 +15,7 @@ function Routes() {
                 screenOptions={{
                     headerShown: false,
                 }}
-                initialRouteName={'Play'}
+                initialRouteName={'Levels'}
             >
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Play" component={PlayScreen} />

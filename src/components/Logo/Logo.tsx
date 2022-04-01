@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import s from './style';
+import s from './styles';
 
 const Logo = () => {
   return (
