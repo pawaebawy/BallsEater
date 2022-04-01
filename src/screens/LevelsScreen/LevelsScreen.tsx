@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { HomeButton, LevelCard } from '../../components';
 import { levels } from '@data/levels';
+import { player } from '@data/player';
 import s from './styles';
 
 const LevelsScreen = ({ navigation }) => {
@@ -10,6 +11,7 @@ const LevelsScreen = ({ navigation }) => {
       return (
         <LevelCard
           navigation={navigation}
+          player={player}
           id={level.id}
           isClosed={level.isClosed}
           isCompleted={level.isCompleted}

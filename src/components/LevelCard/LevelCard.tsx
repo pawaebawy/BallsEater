@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { View, Text } from 'react-native';
-import { PlayButton } from '../index'
+import { GameButton } from '@components/index'
 import { ILevelCardProps } from './types';
 import s from './styles';
 
@@ -14,9 +14,35 @@ const secondsToMinutes = (time: number) => {
 }
 
 const LevelCard: FC<ILevelCardProps> = (props) => {
-    const { navigation, id, isClosed, isCompleted, time, rating } = props;
+    const { navigation, player, id, isClosed, isCompleted, time, rating } = props;
  
-    const handlerCheckLevel = () => {
+    const checkCurrentLevel = () => {
+        if (id === player.currentLevel) {
+            return (
+                <GameButton
+                    id={id}
+                    title={'Играть'}
+                    size={'small'}
+                    darkMode={true}
+                    path={'Play'}
+                    navigation={navigation}
+                />
+            )
+        } else {
+            return (
+                <GameButton
+                    id={id}
+                    title={'Повторить'}
+                    size={'small'}
+                    darkMode={true}
+                    path={'Play'}
+                    navigation={navigation}
+                />
+            )
+        }
+    }
+
+    const checkLevel = () => {
         if (isCompleted) {
             if (time && rating) {
                 return (
@@ -39,10 +65,12 @@ const LevelCard: FC<ILevelCardProps> = (props) => {
         <View key={ id } style={s.levelCard}>
             <Text style={s.levelCardInfo}>Уровень { id }</Text>
             {
-                handlerCheckLevel()
+                checkLevel()
             }
             {
-                !isClosed ? <PlayButton navigation={navigation} /> : ''
+                !isClosed ?
+                    checkCurrentLevel()
+                : ''
             }
         </View>
     );

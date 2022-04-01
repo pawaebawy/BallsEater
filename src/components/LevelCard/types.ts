@@ -1,3 +1,5 @@
+import { IPlayer } from '@data/player';
+
 export interface ILevelData {
     /**
      * Идентификатор уровня.
@@ -34,4 +36,5 @@ export interface ILevelNeedToComplete extends ILevelData {
 
 export interface ILevelCardProps extends ILevelData {
     navigation: any;
+    player: IPlayer;
 }
