@@ -7,7 +7,7 @@ import { fieldData } from './data';
 
 const Field = () => {
   const renderCells = () => {
-    return fieldData.map((column) => {
+    return fieldData.map(column => {
       return (
         <View style={styles.column}>
           {
