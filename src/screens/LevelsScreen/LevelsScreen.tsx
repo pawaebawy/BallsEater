@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { HomeButton, LevelCard } from '../../components';
+import { LevelCard, GameModal } from '../../components';
 import { levels } from '@data/levels';
 import { player } from '@data/player';
+import MenuModal from '../../modals/MenuModal';
 import s from './styles';
 
 const LevelsScreen = ({ navigation }) => {
@@ -25,7 +26,9 @@ const LevelsScreen = ({ navigation }) => {
   return (
     <View style={s.container}>
       <View style={s.header}>
-        <HomeButton navigation={navigation} />
+        <GameModal navigation={navigation}>
+          <MenuModal navigation={navigation} />
+        </GameModal>
       </View>
       <ScrollView style={s.content}>
         {

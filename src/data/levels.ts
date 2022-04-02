@@ -50,6 +50,27 @@ const levels: ILevelData[] = [
         time: null,
         rating: null
     },
+    {
+        id: 8,
+        isClosed: true,
+        isCompleted: false,
+        time: null,
+        rating: null
+    },
+    {
+        id: 9,
+        isClosed: true,
+        isCompleted: false,
+        time: null,
+        rating: null
+    },
+    {
+        id: 10,
+        isClosed: true,
+        isCompleted: false,
+        time: null,
+        rating: null
+    },
 ]
 
 export { levels };

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { IGameButtonProps } from './types';
 import s from './styles';
 
@@ -7,7 +7,7 @@ const GameButton: FC<IGameButtonProps> = (props) => {
     const { id, title, size, icon, darkMode, path, navigation } = props;
 
     return (
-        <TouchableOpacity
+        <Pressable
             key={id}
             onPress={() => navigation.navigate('Play', {
                 idLevel: id
@@ -23,7 +23,7 @@ const GameButton: FC<IGameButtonProps> = (props) => {
                     darkMode ? s.darkText : s.lightText
                 ]}
             >{ title }</Text>
-        </TouchableOpacity>
+        </Pressable>
     );
 };
 

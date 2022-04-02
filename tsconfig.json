@@ -10,6 +10,12 @@
       "@data/*": [
         "data/*"
       ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@modals/*": [
+        "modals/*"
+      ],
     }
   },
   "include": [

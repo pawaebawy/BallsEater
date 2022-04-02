@@ -1,9 +1,9 @@
 export interface IGameButtonProps {
-    id: number;
+    id?: number;
     title: string;
     size: string;
+    darkMode: boolean;
     icon?: string | undefined;
-    darkMode?: boolean;
-    path: string;
-    navigation: any;
+    path?: string | undefined;
+    navigation?: any | undefined;
 }
