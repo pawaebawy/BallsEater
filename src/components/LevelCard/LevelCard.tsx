@@ -15,7 +15,7 @@ const secondsToMinutes = (time: number) => {
 
 const LevelCard: FC<ILevelCardProps> = (props) => {
     const { navigation, player, id, isClosed, isCompleted, time, rating } = props;
- 
+
     const checkCurrentLevel = () => {
         if (id === player.currentLevel) {
             return (
@@ -47,8 +47,8 @@ const LevelCard: FC<ILevelCardProps> = (props) => {
             if (time && rating) {
                 return (
                     <View>
-                        <Text style={s.levelCardInfo}>Время: { secondsToMinutes(time) }</Text>
-                        <Text style={s.levelCardInfo}>Рейтинг: { rating }</Text>
+                        <Text style={s.levelCardInfo}>Время: {secondsToMinutes(time)}</Text>
+                        <Text style={s.levelCardInfo}>Рейтинг: {rating}</Text>
                     </View>
                 )
             }
@@ -62,16 +62,10 @@ const LevelCard: FC<ILevelCardProps> = (props) => {
     }
 
     return (
-        <View key={ id } style={s.levelCard}>
-            <Text style={s.levelCardInfo}>Уровень { id }</Text>
-            {
-                checkLevel()
-            }
-            {
-                !isClosed ?
-                    checkCurrentLevel()
-                : ''
-            }
+        <View key={id} style={s.levelCard}>
+            <Text style={s.levelCardInfo}>Уровень {id}</Text>
+            {checkLevel()}
+            {!isClosed && checkCurrentLevel()}
         </View>
     );
 };

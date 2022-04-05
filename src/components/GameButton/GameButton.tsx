@@ -22,7 +22,7 @@ const GameButton: FC<IGameButtonProps> = (props) => {
                     s.buttonText,
                     darkMode ? s.darkText : s.lightText
                 ]}
-            >{ title }</Text>
+            >{title}</Text>
         </TouchableOpacity>
     );
 };

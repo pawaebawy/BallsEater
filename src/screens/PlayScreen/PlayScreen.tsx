@@ -7,7 +7,7 @@ import Field from '@components/Field/Field';
 import s from './styles'
 
 const PlayScreen = ({ route, navigation }) => {
-  const { idLevel } = route.params;
+  const idLevel = route?.params?.idLevel;
 
   return (
     <View style={s.container}>
@@ -15,7 +15,7 @@ const PlayScreen = ({ route, navigation }) => {
         <HomeButton navigation={navigation} />
       </View>
       <View style={s.content}>
-        <Text>Уровень { idLevel }</Text>
+        {idLevel && <Text>Уровень {idLevel}</Text>}
         <Field />
       </View>
     </View>

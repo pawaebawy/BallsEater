@@ -7,19 +7,19 @@ import s from './styles';
 
 const LevelsScreen = ({ navigation }) => {
   const renderLevel = () => {
-    return levels.map(level => {
-      return (
-        <LevelCard
-          navigation={navigation}
-          player={player}
-          id={level.id}
-          isClosed={level.isClosed}
-          isCompleted={level.isCompleted}
-          time={level.time}
-          rating={level.rating}
-        />
-      )
-    })
+    return levels.map(level => (
+      <LevelCard
+        key={level.id}
+        navigation={navigation}
+        player={player}
+        id={level.id}
+        isClosed={level.isClosed}
+        isCompleted={level.isCompleted}
+        time={level.time}
+        rating={level.rating}
+      />
+    )
+    )
   }
 
   return (

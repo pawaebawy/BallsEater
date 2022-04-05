@@ -1,18 +1,30 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { IFieldData } from '../Field/data';
 
 interface Props {
-  isExist?: boolean
+  cell?: IFieldData,
+  style?: object,
+  onPress?: (cell: IFieldData) => void,
 }
 
 const Cell: React.FC<Props> = props => {
-  const isExist = props.isExist;
+  const { cell, style, children, onPress } = props;
+  const isExists = cell?.isExists;
+  const x = cell?.x;
+  const y = cell?.y;
+  const id = cell?.id;
+
+  const onPressHandler = () => {
+    if (onPress && cell) onPress(cell);
+  };
 
   return (
-    <View style={[
-      styles.root,
-      !isExist ? styles.notExist : null
-    ]}></View>
+    <TouchableWithoutFeedback onPress={onPressHandler}>
+      <View style={[styles.root, !isExists ? styles.notExist : null, style]}>
+        {children}
+      </View>
+    </TouchableWithoutFeedback>
   )
 };
 
@@ -20,10 +32,7 @@ export default Cell;
 
 const styles = StyleSheet.create({
   root: {
-    width: 50,
-    height: 50,
-    borderColor: 'black',
-    borderWidth: 1,
+    flex: 1,
   },
   notExist: {
     opacity: 0,

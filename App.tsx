@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import { LoadingScreen } from './src/screens';
 import Routes from './src/navigation';
 
@@ -18,6 +20,8 @@ const fetchLoading = async () => {
 
   return;
 };
+
+EStyleSheet.build(); // Important expression to use Extended Style Sheet 
 
 const App = () => {
   const [appLoaded, setAppLoaded] = useState(false);
