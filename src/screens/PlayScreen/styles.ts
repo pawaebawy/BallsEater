@@ -16,5 +16,9 @@ export default StyleSheet.create({
         flex: 15,
         backgroundColor: '#fefefe',
         padding: 15
-    }
+    },
+    modalImage: {
+        height: 30,
+        width: 30
+    },
 });

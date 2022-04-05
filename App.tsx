@@ -3,6 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import { LoadingScreen } from './src/screens';
 import Routes from './src/navigation';
+import ModalContext from './src/context/context'
 
 const fetchLoading = async () => {
   const fetchFonts = () => {
@@ -21,6 +22,7 @@ const fetchLoading = async () => {
 
 const App = () => {
   const [appLoaded, setAppLoaded] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const prepare = async () => {
     await fetchLoading();
@@ -41,7 +43,9 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <Routes />
+      <ModalContext.Provider value={{ isModalVisible, setModalVisible }}>
+        <Routes />
+      </ModalContext.Provider>
     </SafeAreaProvider>
   );
 }

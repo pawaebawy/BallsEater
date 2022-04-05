@@ -1,5 +1,6 @@
-import React, { FC, ReactNode, useState } from 'react';
-import { Modal, View, Image, Pressable, Text, TouchableOpacity } from 'react-native';
+import React, { FC, useContext } from 'react';
+import { Modal, View, Image, Pressable, TouchableOpacity } from 'react-native';
+import ModalContext from '../../context/context';
 import s from './styles';
 
 interface IGameModalProps {
@@ -8,7 +9,7 @@ interface IGameModalProps {
 
 const GameModal: FC<IGameModalProps> = (props) => {
   const { navigation, children } = props;
-  const [modalVisible, setModalVisible] = useState(false);
+  const { isModalVisible, setModalVisible } = useContext(ModalContext);
 
   const handlerCloseModal = () => {
     setModalVisible(false);
@@ -16,18 +17,10 @@ const GameModal: FC<IGameModalProps> = (props) => {
 
   return (
     <View>
-      <Pressable
-        onPress={() => {setModalVisible(true)}}
-      >
-        <Image
-          source={require('@assets/images/menu.svg')}
-          style={s.modalImage}
-        />
-      </Pressable>
       <Modal
         animationType='none'
         transparent={true}
-        visible={modalVisible}
+        visible={isModalVisible}
         statusBarTranslucent={true}
         onRequestClose={handlerCloseModal}
       >
@@ -46,7 +39,7 @@ const GameModal: FC<IGameModalProps> = (props) => {
                 style={s.modalCloseImage}
               />
             </Pressable>
-            <View>
+            <View style={s.modalContent}>
               { children }
             </View>
           </View>

@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import s from './styles';
 
 const ResultModal = () => {
   return (
     <View>
-      <Text>Результаты</Text>
+      <Text style={s.modalTitle}>Результаты</Text>
     </View>
   )
 }

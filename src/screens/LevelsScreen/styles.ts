@@ -14,5 +14,9 @@ export default StyleSheet.create({
     content: {
         backgroundColor: '#fefefe',
         padding: 15
-    }
+    },
+    modalImage: {
+        height: 30,
+        width: 30
+    },
 });

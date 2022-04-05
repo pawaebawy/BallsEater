@@ -1,10 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  modalImage: {
-    height: 30,
-    width: 30
-  },
   modalBlockBG: {
     flex: 1,
     justifyContent: 'center',
@@ -27,5 +23,8 @@ export default StyleSheet.create({
   modalCloseImage: {
     width: 30,
     height: 30
+  },
+  modalContent: {
+    width: 'calc(100% - 45px)'
   }
 });
