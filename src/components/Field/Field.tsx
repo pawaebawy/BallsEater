@@ -9,7 +9,7 @@ import { fieldData, IFieldData } from './data';
 
 const Field = () => {
   const [currentUnitId, setCurrentUnitId] = useState<string>();
-  const [next, setNext] = useState<string>();
+  // const [next, setNext] = useState<string>();
   const [field, setField] = useState<IFieldData[]>([]);
   const ROWS = 4;
 
@@ -22,23 +22,60 @@ const Field = () => {
   }
 
   const handleCellPress = (cell: IFieldData) => {
-    if (currentUnitId && field && !cell.isFilled) {
+    if (field && currentUnitId) { // Есть данные поля, есть текущий выбранный unit, ячейка на которую ставим не заполненна
       const pickedUnit = field.find(item => item.id === currentUnitId);
+
       // const nextCell = field.find(item => item.id === cell.id);
 
-      if (pickedUnit) {
-        pickedUnit.isFilled = false; // Make the first choosen cell empty
-        cell.isFilled = true; // Make the next cell filled
+      if (pickedUnit && pickedUnit.x && pickedUnit.y && cell.x && cell.y) {
+        const availableRangeY = [pickedUnit.y - 2, pickedUnit.y + 2];
+        const availableRangeX = [pickedUnit.x - 2, pickedUnit.x + 2];
 
-        setNext(cell.id);
+        if (pickedUnit.y === cell.y && availableRangeX.includes(cell.x)) { // Check Y axis equality and enter X range
+          const removableUnit = field.find(item => {
+            if (
+              item.y === cell.y &&
+              item.x === (pickedUnit.x! > cell.x! ? cell.x! + 1 : cell.x! - 1)
+            ) {
+              return true;
+            }
+          });
+
+          if (removableUnit && removableUnit.isFilled) {
+            removableUnit.isFilled = false;
+            pickedUnit.isFilled = false; // Make the first choosen cell empty
+            cell.isFilled = true; // Make the next cell filled
+
+            setCurrentUnitId(undefined);
+          }
+        }
+
+        if (pickedUnit.x === cell.x && availableRangeY.includes(cell.y)) { // Check X axis equality and enter Y range
+          const removableUnit = field.find(item => {
+            if (
+              item.x === cell.x &&
+              item.y === (pickedUnit.y! > cell.y! ? cell.y! + 1 : cell.y! - 1)
+            ) {
+              return true;
+            }
+          });
+
+          if (removableUnit && removableUnit.isFilled) {
+            removableUnit.isFilled = false;
+            pickedUnit.isFilled = false; // Make the first choosen cell empty
+            cell.isFilled = true; // Make the next cell filled
+
+            setCurrentUnitId(undefined);
+          }
+        }
       }
     };
   };
 
-  const checkRange = (i: number, j: number) => { // Check what a cell we should insert into a current row
+  const checkRange = (y: number, x: number) => { // Check what a cell we should insert into a current row
     if (
-      (j + 1 > (ROWS * (i + 1)) - ROWS) && // For example j from 1 to 4, then from 5 to 8 and so on
-      (j + 1 <= (ROWS * (i + 1)))
+      (x + 1 > (ROWS * (y + 1)) - ROWS) && // For example x from 1 to 4, then from 5 to 8 and so on
+      (x + 1 <= (ROWS * (y + 1)))
     ) {
       return true;
     } else {
@@ -46,25 +83,42 @@ const Field = () => {
     }
   };
 
-  const renderField = () => {
-    return new Array(ROWS).fill(0).map(renderRow);
-  };
+  const renderField = () => (
+    new Array(ROWS).fill(0).map(renderRow)
+  );
 
-  const renderRow = (_: number, i: number) => (
-    <View style={EStyleSheet.child(styles, 'row', i, field.length / ROWS)} key={i}>
+  const renderRow = (_: number, y: number) => (
+    <View style={EStyleSheet.child(styles, 'row', y, field.length / ROWS)} key={y}>
       {
-        field.filter((_, j) => checkRange(i, j)).map(renderCell)
+        field.filter((_, x) => checkRange(y, x)).map(renderCell.bind({}, y))
       }
     </View>
   );
 
-  const renderCell = (cell: IFieldData, i: number) => (
-    <Cell style={EStyleSheet.child(styles, 'cell', i, ROWS)} cell={cell} onPress={handleCellPress} key={cell.id} >
-      {
-        cell.isFilled && <Unit id={cell.id} style={[styles.unit,]} onPress={handleUnitPress} />
-      }
-    </Cell>
-  );
+  const renderCell = (y: number, cell: IFieldData, x: number) => {
+    cell.x = x + 1; // Save the coordinates and increment by 1 because loop starts from 0 value
+    cell.y = y + 1;
+
+    return (
+      <Cell
+        style={[EStyleSheet.child(styles, 'cell', x, ROWS + 1), currentUnitId === cell.id ? styles.cellActive : null]}
+        cell={cell}
+        onPress={cell.isExists && !cell.isFilled ? handleCellPress : undefined} // Dont need a handler if it doesn't exist
+        key={cell.id}
+      >
+        {
+          cell.isFilled && (
+            <Unit
+              id={cell.id}
+              style={styles.unit}
+              onPress={cell.isExists ? handleUnitPress : undefined}
+            />
+          )
+        }
+        {/* <View style={styles.coords}>{`y:${cell.y} x:${cell.x}`}</View> */}
+      </Cell>
+    );
+  };
 
   return (
     <View style={styles.root}>
@@ -110,8 +164,15 @@ const styles = EStyleSheet.create({
     backgroundColor: '#a09e84',
     marginRight: 5,
   },
+  coords: {
+    color: 'white',
+    position: 'absolute',
+  },
   'cell:last-child': {
     marginRight: 0,
+  },
+  cellActive: {
+    backgroundColor: '#ab92c3',
   },
   unit: {
     position: 'absolute',
