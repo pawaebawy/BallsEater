@@ -1,8 +1,7 @@
 // Settings: FORMAT ON SAVE
 import React, { useEffect, useState } from 'react';
-import { View, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { DraxProvider, DraxView } from 'react-native-drax';
 
 import Cell from '@components/Cell/Cell';
 import { Unit } from '@components/Unit/Unit';
@@ -16,14 +15,7 @@ const Field = () => {
   const [field, setField] = useState<IFieldData[]>([]);
   const [currentRow, setCurrentRow] = useState<number>();
 
-  const { width } = Dimensions.get('screen');
-  const PADDING = 15;
-  const UNIT_WIDTH = (width - PADDING * 2) / ROWS;
-  const UNIT_HEIGHT = UNIT_WIDTH; // The same sides = square
-
   useEffect(() => {
-    // console.log(width);
-
     setField(fieldData);
   }, []);
 
@@ -80,34 +72,50 @@ const Field = () => {
     }
   };
 
-  const renderField = () => {
-    let y = 0;
+  const checkRange = (y: number, x: number) => { // Check what a cell we should insert into a current row
+    if (
+      (x + 1 > (ROWS * (y + 1)) - ROWS) && // For example x from 1 to 4, then from 5 to 8 and so on
+      (x + 1 <= (ROWS * (y + 1)))
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
-    return field.map((cell, i) => {
-      let x = i % ROWS;
+  const handleCellPull = (y: number) => {
+    console.log(y);
 
-      if (x === 0 && i !== 0) y++;
+    setCurrentRow(y - 1);
+  }
 
-      // console.log(`y:${y}`, `x:${x}`);
+  const renderField = () => (
+    new Array(ROWS).fill(0).map(renderRow)
+  );
 
-      return (
-        <Cell
-          style={[
-            styles.cell,
-            currentUnitId === cell.id ? styles.cellActive : null,
-            {
-              width: UNIT_WIDTH,
-              height: UNIT_HEIGHT,
-              top: UNIT_WIDTH * y,
-              left: UNIT_WIDTH * x
-            }
-          ]}
-          cell={cell}
-          key={cell.id}
-          onPress={cell.isExists ? handleCellPress : undefined} // Dont need a handler if it doesn't exist
-        />
-      );
-    });
+  const renderRow = (_: number, y: number) => (
+    <View style={[EStyleSheet.child(styles, 'row', y, field.length / ROWS), { zIndex: currentRow === y ? 1 : -1 }]} key={y}>
+      {
+        field.filter((_, x) => checkRange(y, x)).map(renderCell.bind({}, y))
+      }
+    </View>
+  );
+
+  const renderCell = (y: number, cell: IFieldData, x: number) => {
+    cell.x = x + 1; // Save the coordinates and increment by 1 because loop starts from 0 value
+    cell.y = y + 1;
+
+    return (
+      <Cell
+        style={[EStyleSheet.child(styles, 'cell', x, ROWS + 1), currentUnitId === cell.id ? styles.cellActive : null]}
+        cell={cell}
+        onPress={cell.isExists ? handleCellPress : undefined} // Dont need a handler if it doesn't exist
+        key={cell.id}
+        handleCellPull={handleCellPull}
+      >
+        {/* <View style={styles.coords}>{`y:${cell.y} x:${cell.x}`}</View> */}
+      </Cell>
+    );
   };
 
   return (
@@ -130,21 +138,30 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
   },
   field: {
-    position: 'relative',
     flex: 1,
     flexDirection: 'column',
     width: '100%',
-    height: 600,
+  },
+  row: {
+    marginBottom: 5,
+    height: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
+  },
+  'row:last-child': {
+    marginBottom: 0
   },
   cell: {
-    position: 'absolute',
-    // zIndex: 1,
-    // flex: 1,
-    // padding: 3,
-    // width: '100%',
-    // height: 87,
-    // borderWidth: 1,
-    // marginRight: 5,
+    zIndex: 1,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: 87,
+    backgroundColor: '#a09e84',
+    marginRight: 5,
   },
   coords: {
     color: 'white',
