@@ -7,27 +7,26 @@ import { DraxProvider, DraxView } from 'react-native-drax';
 import Cell from '@components/Cell/Cell';
 import { Unit } from '@components/Unit/Unit';
 
-import { fieldData, IFieldData } from './data';
+import { fieldData, IFieldData, ICellData, CellStyle } from './data';
 
-const ROWS = 4;
+// const ROWS = 6;
 
 const Field = () => {
+  const [currentCell, setCurrentCell] = useState<ICellData | null>();
   const [currentUnitId, setCurrentUnitId] = useState<string>();
-  const [field, setField] = useState<IFieldData[]>([]);
-  const [currentRow, setCurrentRow] = useState<number>();
+  const [field, setField] = useState<ICellData[]>([]);
 
-  const { width } = Dimensions.get('screen');
+  const ROWS = fieldData.rowsCount;
   const PADDING = 15;
+  const { width } = Dimensions.get('screen');
   const UNIT_WIDTH = (width - PADDING * 2) / ROWS;
   const UNIT_HEIGHT = UNIT_WIDTH; // The same sides = square
 
   useEffect(() => {
-    // console.log(width);
-
-    setField(fieldData);
+    setField(fieldData.cells);
   }, []);
 
-  const handleCellPress = (cell: IFieldData) => {
+  const handleCellPress = (cell: ICellData) => {
     if (cell.isFilled) {
       setCurrentUnitId(cell.id);
     } else {
@@ -80,6 +79,45 @@ const Field = () => {
     }
   };
 
+  const checkRange = (pickedCell: ICellData, checkingCell: ICellData): boolean => {
+    const availableRangeX = [pickedCell.x! - 2, pickedCell.x! + 2];
+    const availableRangeY = [pickedCell.y! - 2, pickedCell.y! + 2];
+
+    return (
+      (availableRangeX.includes(checkingCell.x!) && checkingCell.y === pickedCell.y)
+      ||
+      (availableRangeY.includes(checkingCell.y!) && checkingCell.x === pickedCell.x)
+    );
+  };
+
+  const handleStartDragging = (pickedCell: ICellData) => {
+    if (pickedCell.isFilled) {
+      setCurrentCell(pickedCell);
+
+      const newField = field.map(cell => {
+        if (!cell.isFilled && checkRange(pickedCell, cell)) {
+          cell.style = CellStyle.Accepted;
+        }
+
+        return cell;
+      });
+
+      setField(newField);
+    }
+  };
+
+  const resetActiveCells = () => {
+    setCurrentCell(null);
+
+    const newField = field.map(cell => {
+      if (cell.style === CellStyle.Accepted) cell.style = CellStyle.Default
+
+      return cell;
+    });
+
+    setField(newField);
+  };
+
   const renderField = () => {
     let y = 0;
 
@@ -89,12 +127,15 @@ const Field = () => {
       if (x === 0 && i !== 0) y++;
 
       // console.log(`y:${y}`, `x:${x}`);
+      cell.x = x;
+      cell.y = y;
+      cell.top = UNIT_WIDTH * y;
+      cell.left = UNIT_WIDTH * x;
 
       return (
         <Cell
           style={[
             styles.cell,
-            currentUnitId === cell.id ? styles.cellActive : null,
             {
               width: UNIT_WIDTH,
               height: UNIT_HEIGHT,
@@ -102,9 +143,12 @@ const Field = () => {
               left: UNIT_WIDTH * x
             }
           ]}
+          isActive={currentCell?.id === cell.id}
           cell={cell}
+          onFinishDragging={resetActiveCells}
           key={cell.id}
-          onPress={cell.isExists ? handleCellPress : undefined} // Dont need a handler if it doesn't exist
+          // onPress={cell.isExists ? handleCellPress : undefined} // Dont need a handler if it doesn't exist
+          onStartDragging={cell.isExists ? handleStartDragging : undefined}
         />
       );
     });
@@ -152,8 +196,5 @@ const styles = EStyleSheet.create({
   },
   'cell:last-child': {
     marginRight: 0,
-  },
-  cellActive: {
-    backgroundColor: '#ab92c3',
   },
 });

@@ -1,23 +1,26 @@
 import { Unit } from '@components/Unit/Unit';
 import React from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { PanGestureHandler, PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { DraxProvider, DraxView } from 'react-native-drax';
 
 
-import { IFieldData } from '../Field/data';
+import { IFieldData, ICellData, CellStyle } from '../Field/data';
 
 interface Props {
-  cell: IFieldData,
+  isActive?: boolean,
+  cell: ICellData,
   style?: object,
   handleCellPull?: (y: number) => void,
-  onPress?: (cell: IFieldData) => void,
+  onPress?: (cell: ICellData) => void,
+  onStartDragging?: (cell: ICellData) => void,
+  onFinishDragging?: () => void,
 }
 
 const Cell: React.FC<Props> = props => {
-  const { cell, style, children, onPress, handleCellPull } = props;
+  const { cell, style, children, onPress, isActive, handleCellPull, onFinishDragging, onStartDragging } = props;
   const isExists = cell?.isExists;
   const x = cell?.x;
   const y = cell?.y;
@@ -37,7 +40,9 @@ const Cell: React.FC<Props> = props => {
       ctx.startX = translateX.value;
       ctx.startY = translateY.value;
 
-      handleCellPull && y && handleCellPull(y);
+      // handleCellPull && y && handleCellPull(y);
+
+      if (cell && onStartDragging) onStartDragging(cell);
     },
     onActive: (event, ctx) => {
       myIndex.value = ctx.myIndex + 1;
@@ -48,6 +53,8 @@ const Cell: React.FC<Props> = props => {
       translateX.value = withSpring(0);
       translateY.value = withSpring(0);
       setTimeout(() => myIndex.value = -1, 500);
+
+      if (onFinishDragging) onFinishDragging();
     },
   });
 
@@ -66,15 +73,18 @@ const Cell: React.FC<Props> = props => {
     };
   });
 
+
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View style={[styles.root, !isExists ? styles.notExist : null, style, animatedLayerStyle]}>
-        <View style={styles.inner}>
+        <View style={[styles.inner, isActive ? styles.active : null, cell?.style === CellStyle.Accepted ? styles.accepted : null]}>
           {cell.isFilled && (
             <Animated.View style={[animatedTransformStyle, { width: "100%", height: "100%" }]}>
               <Unit id={cell.id} />
+
             </Animated.View>
           )}
+          <Text style={styles.coords}>{`x:${x + ';y:' + y}`}</Text>
         </View>
       </Animated.View>
     </PanGestureHandler>
@@ -118,5 +128,22 @@ const styles = EStyleSheet.create({
   },
   notExist: {
     opacity: 0,
+  },
+  accepted: {
+    backgroundColor: '#89d48e',
+  },
+  active: {
+    backgroundColor: '#ab92c3',
+  },
+  coords: {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: [{
+      translateX: '-50%',
+      translateY: '-50%',
+    }],
+    color: 'white',
+    fontWeight: 600,
   }
 });
